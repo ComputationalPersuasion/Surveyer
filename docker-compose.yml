@@ -1,0 +1,31 @@
+version: '3'
+services:
+  front:
+    image: node:alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./Node/surveyer:/home/node/surveyer
+    command: npm run dev
+    working_dir: /home/node/surveyer
+    user: node
+    environment:
+      - HOST=0.0.0.0
+
+  back:
+    build: ./Python
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./Python/:/home/flask
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_DEBUG=1
+      - PYTHONUNBUFFERED=0
+
+  db:
+    build: ./Mongo
+    expose:
+      - 12017
+    volumes:
+      - ./Mongo/:/data/db
