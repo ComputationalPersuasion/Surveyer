@@ -12,18 +12,18 @@
 export default {
   name: 's-form',
   props: {
-    data_name: {
+    base_name: {
       type: String,
       required: true,
     },
   },
   provide() {
     return {
-      form_name: this.data_name,
+      form_name: this.base_name,
     };
   },
   created() {
-    this.$store.registerModule(this.data_name.split('.'), {
+    this.$store.registerModule(this.base_name.split('.'), {
       namespaced: true,
     });
   },

@@ -2,7 +2,7 @@ import SingleValue from '../../store/modules/SingleValue';
 
 const SingleValued = {
   props: {
-    data_name: {
+    base_name: {
       type: String,
       required: true,
     },
@@ -13,6 +13,9 @@ const SingleValued = {
     },
   },
   computed: {
+    data_name() {
+      return this.base_name;
+    },
     value: {
       get() {
         return this.$store.getters[`${this.data_name.replace('.', '/')}/value`];

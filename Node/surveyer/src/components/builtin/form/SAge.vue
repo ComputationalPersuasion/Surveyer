@@ -1,7 +1,7 @@
 <template>
   <s-input :error_message="error_msg"
           :label="label"
-          :data_name="nested_name"
+          :base_name="base_name"
           type="number"
           :req="req"
           :min="min"
@@ -10,12 +10,9 @@
 
 <script>
 import { SInput } from '../../core';
-// import { Validable } from '../../mixins';
 
 export default {
   name: 's-age',
-  inject: ['form_name'],
-  // mixins: [Validable],
   components: {
     SInput,
   },
@@ -24,7 +21,7 @@ export default {
       type: String,
       default: 'Age',
     },
-    data_name: {
+    base_name: {
       type: String,
       default: 'age',
     },
@@ -42,9 +39,6 @@ export default {
     },
   },
   computed: {
-    nested_name() {
-      return `${this.form_name}.${this.data_name}`;
-    },
     error_msg() {
       return `Please enter your age (between ${this.min} and ${this.max}).`;
     },

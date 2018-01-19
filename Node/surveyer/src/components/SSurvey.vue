@@ -59,7 +59,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    data_name: {
+    base_name: {
       type: String,
       default: 'survey',
     },

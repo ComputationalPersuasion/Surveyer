@@ -16,9 +16,9 @@ Thank you.</h6>
 
       <s-step>
         <s-question question="Please enter your Prolific ID.">
-          <s-form data_name="prolific">
+          <s-form base_name="prolific">
             <s-input label="Prolific ID"
-                    data_name="id"
+                    base_name="id"
                     error_message="Please enter a valid Prolific ID."
                     req/>
           </s-form>
@@ -43,9 +43,9 @@ Please proceed to the next page.</h6>
 
       <s-step>
         <s-question question="Please enter some additional information.">
-          <s-form data_name="demo">
-            <s-age data_name="age" req/>
-            <s-sex data_name="sex" req/>
+          <s-form base_name="demo">
+            <s-age base_name="age" req/>
+            <s-sex base_name="sex" req/>
           </s-form>
         </s-question>
       </s-step>

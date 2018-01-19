@@ -1,6 +1,6 @@
 <template>
   <s-question :question="question" req>
-    <SLikertTable :items="rfq.items" :data_name="data_name" extremOnly></SLikertTable>
+    <SLikertTable :items="rfq.items" :base_name="base_name" extremOnly></SLikertTable>
   </s-question>
 </template>
 
@@ -22,7 +22,7 @@ export default {
     },
   },
   props: {
-    data_name: {
+    base_name: {
       type: String,
       default: 'rfq',
     },
@@ -32,8 +32,8 @@ export default {
     },
   },
   created() {
-    const { module, submodulesRegister, watchersRegister } = RFQModule(this.data_name);
-    this.$store.registerModule(this.data_name.split('.'), module);
+    const { module, submodulesRegister, watchersRegister } = RFQModule(this.base_name);
+    this.$store.registerModule(this.base_name.split('.'), module);
     submodulesRegister(this.$store);
     watchersRegister(this.$store);
   },

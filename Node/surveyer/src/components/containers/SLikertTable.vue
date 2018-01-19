@@ -1,7 +1,7 @@
 <template>
   <q-data-table :data="rows" :config="config" :columns="columns" class="no-border">
     <template slot="col-likert" slot-scope="cell">
-      <SLikertRating :size="cell.row.size" :data_name="data_name+'.'+cell.row.tag" />
+      <SLikertRating :size="cell.row.size" :base_name="base_name+'.'+cell.row.tag" />
     </template>
   </q-data-table>
 </template>
@@ -33,7 +33,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    data_name: {
+    base_name: {
       type: String,
       required: true,
     },
