@@ -1,5 +1,5 @@
 <template>
-  <q-layout>
+  <q-layout @updateStep="updateStepVal">
     <div class="animate-fade">
       <slot name="header"></slot>
     </div>
@@ -15,14 +15,30 @@
         <q-card-main>
           <div class="row">
             <div class="col-1">
-              <q-btn v-back-to-top.animate="{offset: -1, duration: 200}" icon="keyboard_arrow_left" color="primary" @click="decrement" :disabled="firstpage" class="stepper" v-if="!emptysteps" round small/>
+              <q-btn v-if="!emptysteps"
+                     class="stepper" round small
+                     icon="keyboard_arrow_left" color="primary"
+                     v-back-to-top.animate="{offset: -1, duration: 200}"
+                     @click="decrement"
+                     :disabled="firstpage"/>
             </div>
             <div class="col">
               <q-progress :percentage="percentage" color="primary" style="height: 20px;top: 10px" />
             </div>
             <div class="col-1">
-              <q-btn v-back-to-top.animate="{offset: -1, duration: 200}" icon="keyboard_arrow_right" color="primary" @click="increment" class="stepper" v-if="!lastpage && !emptysteps" small round />
-              <q-btn v-back-to-top.animate="{offset: -1, duration: 200}" color="secondary" class="stepper" icon="send" v-else @click="submit" native-type="submit" round small />
+              <q-btn v-if="!lastpage && !emptysteps"
+                     :disabled="!isCurrentStepValid"
+                     class="stepper" small round
+                     icon="keyboard_arrow_right" color="primary"
+                     v-back-to-top.animate="{offset: -1, duration: 200}"
+                     @click="increment"/>
+              <q-btn v-else
+                     :disabled="!isCurrentStepValid"
+                     class="stepper" round small
+                     color="secondary"  icon="send"
+                     native-type="submit"
+                     v-back-to-top.animate="{offset: -1, duration: 200}"
+                     @click="submit"/>
             </div>
           </div>
         </q-card-main>
@@ -52,6 +68,7 @@ export default {
     return {
       steps: 0,
       submitted: false,
+      step_val_state: [],
     };
   },
   props: {
@@ -75,10 +92,16 @@ export default {
       return this.steps > 15;
     },
     emptysteps() {
-      return this.steps === 0;
+      return this.steps === 1;
     },
     percentage() {
       return Math.round((this.value / this.steps) * 100) || 0;
+    },
+    isCurrentStepValid() {
+      return this.step_val_state[this.value];
+    },
+    isSurveyValid() {
+      return this.step_val_state.every(v => v);
     },
   },
   methods: {
@@ -95,12 +118,16 @@ export default {
       this.increment();
       this.submitted = true;
     },
+    updateStepVal(id, val) {
+      this.$set(this.step_val_state, id, val);
+    },
   },
   mounted() {
     let ind = 0;
     this.$slots.default.forEach((node) => {
       if (node.componentOptions && node.componentOptions.tag === 's-step') {
         this.steps += 1;
+        this.step_val_state.push(node.componentInstance.isValid());
         /* eslint no-param-reassign: ["error", { "props": false }] */
         node.componentInstance.surveyname = this.data_name;
         node.componentInstance.step = ind;

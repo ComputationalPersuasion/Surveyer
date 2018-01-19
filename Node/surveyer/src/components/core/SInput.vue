@@ -4,12 +4,14 @@
              v-model.number="value"
              :float-label="reqlabel"
              type="number"
-             @blur="$v.value.$touch"/>
+             @blur="$v.value.$touch"
+             @change="notifyParent"/>
     <q-input v-else
              v-model="value"
              :float-label="reqlabel"
              :type="type"
-             @blur="$v.value.$touch"/>
+             @blur="$v.value.$touch"
+             @change="notifyParent"/>
   </q-field>
 </template>
 
@@ -24,7 +26,7 @@ export default {
     QField,
     QInput,
   },
-  mixins: [FormItem, SingleValued, Validable],
+  mixins: [SingleValued, FormItem, Validable],
   props: {
     type: {
       type: String,
@@ -43,14 +45,7 @@ export default {
     isNumber() {
       return this.type === 'number';
     },
-    /* isValid() {
-      return !this.$v.value.$error && (!this.req || (this.value !== undefined));
-    }, */
-  },
-  watch: {
-    /* isValid: function updateValidation() {
-      this.valid = this.isValid;
-    }, */
+
   },
   validations() {
     const v = {

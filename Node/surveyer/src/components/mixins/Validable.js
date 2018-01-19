@@ -1,5 +1,3 @@
-// import Validated from '../../store/modules/Validated';
-
 const Validable = {
   props: {
     req: {
@@ -12,22 +10,18 @@ const Validable = {
     },
   },
   computed: {
-    /* valid: {
-      get() {
-        return this.$store.getters[`${this.data_name.replace('.', '/')}/Validation/valid`];
-      },
-      set(newValue) {
-        this.$store.commit(`${this.data_name.replace('.', '/')}/Validation/validate`, newValue);
-      },
-    }, */
+    isValid() {
+      return !this.req || !this.$v.value.$invalid;
+    },
   },
-  /* created() {
-    const dataNameArr = this.data_name.split('.');
-    console.log(this.data_name);
-    console.log(this.$store);
-    this.$store.registerModule(dataNameArr, { namespace: true });
-    this.$store.registerModule(dataNameArr.concat(['Validation']), Validated);
-  }, */
+  methods: {
+    notifyParent() {
+      this.$parent.$emit('updateVal', this.data_name, this.isValid);
+    },
+  },
+  mounted() {
+    this.notifyParent();
+  },
 };
 
 export default Validable;

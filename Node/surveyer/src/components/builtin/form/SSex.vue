@@ -37,7 +37,11 @@ export default {
     items() {
       return Sex.items;
     },
-    },
+  },
+  created() {
+    this.$on('updateVal', function updateVal(name, val) {
+      this.$parent.$emit('updateVal', name, val);
+    });
   },
 };
 </script>

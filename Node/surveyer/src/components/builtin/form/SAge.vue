@@ -43,6 +43,10 @@ export default {
       return `Please enter your age (between ${this.min} and ${this.max}).`;
     },
   },
-
+  created() {
+    this.$on('updateVal', function updateVal(name, val) {
+      this.$parent.$emit('updateVal', name, val);
+    });
+  },
 };
 </script>

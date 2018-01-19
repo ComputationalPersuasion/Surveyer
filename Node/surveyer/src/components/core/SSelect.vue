@@ -4,7 +4,8 @@
               :options="options"
               :float-label="reqlabel"
               :filter="filter"
-              @blur="$v.value.$touch"/>
+              @blur="$v.value.$touch"
+              @change="notifyParent"/>
   </q-field>
 </template>
 
@@ -34,15 +35,7 @@ export default {
     options() {
       return this.items.map(it => ({ label: it.text, value: it.tag }));
     },
-    /* isValid() {
-      return !this.$v.value.$error && (!this.req || (this.value !== undefined));
-    }, */
   },
-  /* watch: {
-    isValid: function updateValidation() {
-      this.valid = this.isValid;
-    },
-  }, */
   validations() {
     return {
       value: {
