@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-main>
-      <h6 class="text-justify" v-if="question">{{question}} <span v-if="req" class="reqmark">*</span></h6>
+      <h6 class="text-justify canwrap" v-if="question">{{question}} <span v-if="req" class="reqmark">*</span></h6>
       <slot>
         <span>No question asked.</span>
       </slot>
@@ -30,10 +30,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-h6 {
-  white-space: pre-wrap;
-  font-weight: normal;
-}
-</style>

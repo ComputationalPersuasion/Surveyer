@@ -119,4 +119,13 @@ export default {
 .reqmark {
   color: red;
 }
+
+.canwrap {
+  white-space: pre-wrap;
+  font-weight: normal;
+}
+
+h6 {
+  font-size: 15px;
+}
 </style>
