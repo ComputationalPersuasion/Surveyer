@@ -15,14 +15,14 @@
         <q-card-main>
           <div class="row">
             <div class="col-1">
-              <q-btn v-back-to-top="-1" icon="keyboard_arrow_left" color="primary" @click="decrement" :disabled="firstpage" class="stepper" v-if="!emptysteps" round small/>
+              <q-btn v-back-to-top.animate="{offset: -1, duration: 200}" icon="keyboard_arrow_left" color="primary" @click="decrement" :disabled="firstpage" class="stepper" v-if="!emptysteps" round small/>
             </div>
             <div class="col">
               <q-progress :percentage="percentage" color="primary" style="height: 20px;top: 10px" />
             </div>
             <div class="col-1">
-              <q-btn v-back-to-top="-1" icon="keyboard_arrow_right" color="primary" @click="increment" class="stepper" v-if="!lastpage && !emptysteps" small round />
-              <q-btn v-back-to-top="-1" color="secondary" class="stepper" icon="send" v-else @click="submit" native-type="submit" round small />
+              <q-btn v-back-to-top.animate="{offset: -1, duration: 200}" icon="keyboard_arrow_right" color="primary" @click="increment" class="stepper" v-if="!lastpage && !emptysteps" small round />
+              <q-btn v-back-to-top.animate="{offset: -1, duration: 200}" color="secondary" class="stepper" icon="send" v-else @click="submit" native-type="submit" round small />
             </div>
           </div>
         </q-card-main>
