@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-main>
-      <h6 class="text-justify" v-if="question">{{question}} <span v-if="!optional" class="reqmark">*</span></h6>
+      <h6 class="text-justify" v-if="question">{{question}} <span v-if="req" class="reqmark">*</span></h6>
       <slot>
         <span>No question asked.</span>
       </slot>
@@ -23,7 +23,7 @@ export default {
       type: String,
       default: null,
     },
-    optional: {
+    req: {
       type: Boolean,
       default: false,
     },
