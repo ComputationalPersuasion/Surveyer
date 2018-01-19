@@ -1,43 +1,46 @@
 <template>
   <div id="app">
     <s-survey>
-      <h1 slot="header">Cycling in the city</h1>
+      <h1 slot="header">Arguments</h1>
       <s-step>
-        <s-cond :condition="rand(2)" data_name="cond_psycho">
-          <s-cond-block :condition_value="0">
-            <s-tipi />
-          </s-cond-block>
+        <s-question>
+          <h6 class="text-left canwrap">Hello and welcome,
 
-          <s-cond-block :condition_value="1">
-            <s-rfq />
-          </s-cond-block>
-        </s-cond>
+You are about to take part in an experiment in which you will be asked about your beliefs on different topics. For each topic, we will also present you with arguments extracted from actual debates taking place on a debating forum. These arguments are representing all points of view and do not reflect ours, only those of the participants of these debates. There is no right or wrong answer.
 
-        <!--<s-cond :condition="other('cond_psycho')" data_name="cond_toto">
-          <s-cond-block :condition_value="0">
-            <el-card>
-              TIPI above.
-            </el-card>
-          </s-cond-block>
-          <s-cond-block :condition_value="1">
-            <el-card>
-              RFQ above.
-            </el-card>
-          </s-cond-block>
-        </s-cond>-->
+In addition, it is completely anonymous and you can decide to withdraw from the experiment at any point in time.
+
+Thank you.</h6>
+        </s-question>
       </s-step>
-        <!--<SLikertTable :items="tipi.items" data_name="tipi" extremOnly @update:tipi="updateTipi"></SLikertTable>-->
-      <!--<el-card>
-        O: {{O}} C: {{C}} E: {{E}} A: {{A}} N: {{N}}
-      </el-card>-->
-      <!--<SQuestion :question="rfq.instruction">
-        <SLikertTable :items="rfq.items" data_name="rfq" extremOnly @update:rfq="updateRFQ"></SLikertTable>
-      </SQuestion>-->
-      <!--<el-card>
-        pre: {{prevention}} pro: {{promotion}}
-      </el-card>-->
+
       <s-step>
-        <s-question question="Please enter some preliminary information.">
+        <s-question question="Please enter your Prolific ID.">
+          <s-form data_name="prolific">
+            <s-input label="Prolific ID"
+                    data_name="id" req/>
+          </s-form>
+        </s-question>
+      </s-step>
+
+      <s-step>
+        <s-question>
+          <h6 class="text-left canwrap">We will first start with some questions about yourself.
+
+Please proceed to the next page.</h6>
+        </s-question>
+      </s-step>
+
+      <s-step>
+        <s-tipi />
+      </s-step>
+
+      <s-step>
+        <s-rfq />
+      </s-step>
+
+      <s-step>
+        <s-question question="Please enter some additional information.">
           <s-form data_name="demo">
             <s-age data_name="age" req/>
             <s-sex data_name="sex" req/>
@@ -47,22 +50,9 @@
 
       <s-step>
         <s-question>
-          <s-chat/>
+          <h6 class="text-left canwrap">We are now going to ask you a few questions on how you feel about abortion. There is no right or wrong answer, all we are interested in is what you believe.</h6>
         </s-question>
       </s-step>
-      <!--<SQuestion>
-        <SSelect data_name="sex" :items="sex.items"></SSelect>
-      </SQuestion>
-
-      <SQuestion>
-        <SLikertRadio data_name="radio"></SLikertRadio>
-      </SQuestion>-->
-
-      <!--<SStep title="End">
-        <el-card style="text-align:left; white-space:pre-wrap">
-          {{JSON.stringify(this.$store.state, null, 4)}}
-        </el-card>
-      </SStep>-->
     </s-survey>
   </div>
 </template>
@@ -71,7 +61,7 @@
 import { SSurvey, SStep, SQuestion } from './components';
 import { SCond, SCondBlock, randCond, otherCond } from './components/conditional';
 import { SLikertTable, SChat } from './components/containers';
-import { SSelect, SLikertRadio, SLikertSlider, SForm } from './components/core';
+import { SSelect, SLikertRadio, SLikertSlider, SForm, SInput } from './components/core';
 import { SSex, SAge } from './components/builtin/form';
 import { STipi, SRfq } from './components/builtin/questionnaires';
 
@@ -93,6 +83,7 @@ export default {
     SStep,
     SSurvey,
     SChat,
+    SInput,
   },
   methods: {
     rand: randCond,
