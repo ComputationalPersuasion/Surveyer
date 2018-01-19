@@ -1,16 +1,11 @@
 <template>
-  <q-field v-if="in_form" :errorLabel="error_message" :error="$v.value.$error">
+  <q-field :error-label="error_message" :error="$v.value.$error">
     <q-select v-model="value"
               :options="options"
               :float-label="reqlabel"
               :filter="filter"
               @blur="$v.value.$touch"/>
-    {{value}}
   </q-field>
-  <q-select v-else v-model="value"
-                   :options="options"
-                   :float-label="reqlabel"
-                   :filter="filter"/>
 </template>
 
 <script>

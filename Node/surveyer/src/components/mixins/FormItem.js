@@ -4,10 +4,6 @@ const FormItem = {
       type: String,
       required: true,
     },
-    in_form: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     reqlabel() {

@@ -18,7 +18,9 @@ Thank you.</h6>
         <s-question question="Please enter your Prolific ID.">
           <s-form data_name="prolific">
             <s-input label="Prolific ID"
-                    data_name="id" req/>
+                    data_name="id"
+                    error_message="Please enter a valid Prolific ID."
+                    req/>
           </s-form>
         </s-question>
       </s-step>

@@ -5,8 +5,7 @@
           type="number"
           :req="req"
           :min="min"
-          :max="max"
-          in_form/>
+          :max="max"/>
 </template>
 
 <script>

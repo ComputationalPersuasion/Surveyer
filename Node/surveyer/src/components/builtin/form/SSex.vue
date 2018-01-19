@@ -3,7 +3,7 @@
            :req="req"
            :items="items"
            :label="label"
-           :data_name="nested_name" in_form/>
+           :data_name="nested_name"/>
 </template>
 
 <script>

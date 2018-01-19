@@ -1,5 +1,5 @@
 <template>
-  <q-field v-if="in_form" :errorLabel="error_message" :error="$v.value.$error">
+  <q-field :error-label="error_message" :error="$v.value.$error">
     <q-input v-if="isNumber"
              v-model.number="value"
              :float-label="reqlabel"
@@ -11,7 +11,6 @@
              :type="type"
              @blur="$v.value.$touch"/>
   </q-field>
-  <q-input v-else v-model="value" :float-label="reqlabel" :type="type"/>
 </template>
 
 <script>
