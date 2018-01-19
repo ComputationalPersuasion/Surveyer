@@ -1,5 +1,5 @@
 <template>
-  <s-question :question="question">
+  <s-question :question="question" req>
     <SLikertTable :items="tipi.items" :data_name="data_name" extremOnly></SLikertTable>
   </s-question>
 </template>
