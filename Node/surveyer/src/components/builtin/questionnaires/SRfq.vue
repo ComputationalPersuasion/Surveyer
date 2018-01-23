@@ -1,58 +1,36 @@
 <template>
-  <s-question :question="question"
-              :req="req"
-              @updateValidation="updateValidation">
-    <SLikertTable :items="rfq.items"
-                  :base_name="base_name"
-                  extremOnly
-                  :req="req"/>
-  </s-question>
+  <s-questionnaire :questionnaire="questionnaire"
+                   :module="module"
+                   :req="req"
+                   :base_name="base_name"
+                   @updateValidation="updateValidation"/>
 </template>
 
 <script>
-import { SLikertTable } from '../../containers';
-import { SQuestion } from '../../';
+import { SQuestionnaire } from '../../containers';
+import { Questionnaire } from '../../mixins';
 import { RFQ } from '../../../questionnaires/personality';
 import RFQModule from '../../../store/modules/RegulatoryFocusQuestionnaire';
 
 export default {
   name: 's-rfq',
+  mixins: [Questionnaire],
   components: {
-    SLikertTable,
-    SQuestion,
-  },
-  computed: {
-    rfq() {
-      return RFQ;
-    },
-    isValid() {
-      return this.$children[0].isValid;
-    },
+    SQuestionnaire,
   },
   props: {
     base_name: {
       type: String,
       default: 'rfq',
     },
-    question: {
-      type: String,
-      default: RFQ.instruction,
+    questionnaire: {
+      type: Object,
+      default: () => RFQ,
     },
-    req: {
-      type: Boolean,
-      default: false,
+    module: {
+      type: Function,
+      default: RFQModule,
     },
-  },
-  methods: {
-    updateValidation(val) {
-      this.$emit('updateValidation', val);
-    },
-  },
-  created() {
-    const { module, submodulesRegister, watchersRegister } = RFQModule(this.base_name);
-    this.$store.registerModule(this.base_name.split('.'), module);
-    submodulesRegister(this.$store);
-    watchersRegister(this.$store);
   },
 };
 </script>

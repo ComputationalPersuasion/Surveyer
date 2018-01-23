@@ -1,7 +1,7 @@
 import { requiredIf } from 'vuelidate/lib/validators';
 import { SingleValued, FormItem, Validable } from '../mixins';
 
-export default {
+const CoreItem = {
   mixins: [SingleValued, FormItem, Validable],
   methods: {
     addValidations() {
@@ -24,3 +24,5 @@ export default {
     return v;
   },
 };
+
+export default CoreItem;
