@@ -15,12 +15,11 @@
         <q-card-main>
           <div class="row">
             <div class="col-1">
-              <q-btn v-if="!emptysteps"
+              <q-btn v-if="!emptysteps && !firstpage"
                      class="stepper" round small
                      icon="keyboard_arrow_left" color="primary"
                      v-back-to-top.animate="{offset: -1, duration: 200}"
-                     @click="decrement"
-                     :disabled="firstpage"/>
+                     @click="decrement"/>
             </div>
             <div class="col">
               <q-progress :percentage="percentage" color="primary" style="height: 20px;top: 10px" />
@@ -33,7 +32,7 @@
                      v-back-to-top.animate="{offset: -1, duration: 200}"
                      @click="increment"/>
               <q-btn v-else
-                     :disabled="!isCurrentStepValid"
+                     :disabled="!isValid"
                      class="stepper" round small
                      color="secondary"  icon="send"
                      native-type="submit"
@@ -68,7 +67,7 @@ export default {
     return {
       steps: 0,
       submitted: false,
-      step_val_state: [],
+      step_valid_state: [],
     };
   },
   props: {
@@ -98,10 +97,10 @@ export default {
       return Math.round((this.value / this.steps) * 100) || 0;
     },
     isCurrentStepValid() {
-      return this.step_val_state[this.value];
+      return this.step_valid_state[this.value];
     },
-    isSurveyValid() {
-      return this.step_val_state.every(v => v);
+    isValid() {
+      return this.step_valid_state.every(v => v);
     },
   },
   methods: {
@@ -119,7 +118,7 @@ export default {
       this.submitted = true;
     },
     updateStepVal(id, val) {
-      this.$set(this.step_val_state, id, val);
+      this.$set(this.step_valid_state, id, val);
     },
   },
   mounted() {
@@ -127,11 +126,17 @@ export default {
     this.$slots.default.forEach((node) => {
       if (node.componentOptions && node.componentOptions.tag === 's-step') {
         this.steps += 1;
-        this.step_val_state.push(node.componentInstance.isValid());
-        /* eslint no-param-reassign: ["error", { "props": false }] */
-        node.componentInstance.surveyname = this.data_name;
-        node.componentInstance.step = ind;
+        this.step_valid_state.push(node.componentInstance.isValid);
+        this.$set(node.componentInstance, 'surveyname', this.data_name);
+        this.$set(node.componentInstance, 'step', ind);
+        node.componentInstance.$on('updateValidation', (function handler(s, index) {
+          return function update(val) {
+            s.$set(s.step_valid_state, index, val);
+          };
+        }(this, ind)));
         ind += 1;
+      } else if (node.componentOptions) {
+        console.log(node.componentOptions.tag);
       }
     });
   },

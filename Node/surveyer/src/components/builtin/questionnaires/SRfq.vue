@@ -1,6 +1,11 @@
 <template>
-  <s-question :question="question" req>
-    <SLikertTable :items="rfq.items" :base_name="base_name" extremOnly></SLikertTable>
+  <s-question :question="question"
+              :req="req"
+              @updateValidation="updateValidation">
+    <SLikertTable :items="rfq.items"
+                  :base_name="base_name"
+                  extremOnly
+                  :req="req"/>
   </s-question>
 </template>
 
@@ -20,6 +25,9 @@ export default {
     rfq() {
       return RFQ;
     },
+    isValid() {
+      return this.$children[0].isValid;
+    },
   },
   props: {
     base_name: {
@@ -29,6 +37,15 @@ export default {
     question: {
       type: String,
       default: RFQ.instruction,
+    },
+    req: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  methods: {
+    updateValidation(val) {
+      this.$emit('updateValidation', val);
     },
   },
   created() {

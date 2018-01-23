@@ -16,8 +16,7 @@ export default {
   name: 's-question',
   data() {
     return {
-      q_id: -1,
-      children_valid_state: new Map(),
+      children_valid_state: [],
     };
   },
   components: {
@@ -34,15 +33,27 @@ export default {
       default: false,
     },
   },
-  methods: {
+  computed: {
     isValid() {
-      return Array.from(this.children_valid_state.values()).every(p => p);
+      return this.children_valid_state.every(p => p);
     },
   },
-  created() {
-    this.$on('updateVal', function updateVal(name, val) {
-      this.children_valid_state.set(name, val);
-      this.$parent.$emit('updateQuestion', this.q_id, this.isValid());
+  mounted() {
+    let ind = 0;
+    this.$slots.default.forEach((node) => {
+      if (node.componentInstance) {
+        const valid = node.componentInstance.isValid;
+        if (valid !== undefined) {
+          this.children_valid_state.push(node.componentInstance.isValid);
+          node.componentInstance.$on('updateValidation', (function handler(q, index) {
+            return function update(val) {
+              q.$set(q.children_valid_state, index, val);
+              q.$emit('updateValidation', q.isValid);
+            };
+          }(this, ind)));
+          ind += 1;
+        }
+      }
     });
   },
 };

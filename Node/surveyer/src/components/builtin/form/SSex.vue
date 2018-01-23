@@ -3,7 +3,8 @@
            :req="req"
            :items="items"
            :label="label"
-           :base_name="base_name"/>
+           :base_name="base_name"
+           @updateValidation="notify"/>
 </template>
 
 <script>
@@ -37,11 +38,14 @@ export default {
     items() {
       return Sex.items;
     },
+    isValid() {
+      return this.$children[0].isValid;
+    },
   },
-  created() {
-    this.$on('updateVal', function updateVal(name, val) {
-      this.$parent.$emit('updateVal', name, val);
-    });
+  methods: {
+    notify(val) {
+      this.$emit('updateValidation', val);
+    },
   },
 };
 </script>

@@ -13,7 +13,7 @@ export default {
   name: 's-form',
   data() {
     return {
-      children_valid_state: new Map(),
+      children_valid_state: [],
     };
   },
   props: {
@@ -22,9 +22,9 @@ export default {
       required: true,
     },
   },
-  methods: {
+  computed: {
     isValid() {
-      return Array.from(this.children_valid_state.values()).every(p => p);
+      return this.children_valid_state.every(p => p);
     },
   },
   provide() {
@@ -36,9 +36,20 @@ export default {
     this.$store.registerModule(this.base_name.split('.'), {
       namespaced: true,
     });
-    this.$on('updateVal', function updateVal(name, val) {
-      this.children_valid_state.set(name, val);
-      this.$parent.$emit('updateVal', this.base_name, this.isValid());
+  },
+  mounted() {
+    let ind = 0;
+    this.$slots.default.forEach((node) => {
+      if (node.componentInstance) {
+        this.children_valid_state.push(node.componentInstance.isValid);
+        node.componentInstance.$on('updateValidation', (function handler(form, index) {
+          return function update(val) {
+            form.$set(form.children_valid_state, index, val);
+            form.$emit('updateValidation', form.isValid);
+          };
+        }(this, ind)));
+        ind += 1;
+      }
     });
   },
 };

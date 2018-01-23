@@ -1,7 +1,10 @@
 <template>
   <q-data-table :data="rows" :config="config" :columns="columns" class="no-border">
     <template slot="col-likert" slot-scope="cell">
-      <SLikertRating :size="cell.row.size" :base_name="base_name+'.'+cell.row.tag" />
+      <s-likert-rating :size="cell.row.size"
+                       :base_name="base_name+'.'+cell.row.tag"
+                       :req="req"
+                       @updateValidation="(val) => updateRowVal(cell.row.tag, val)"/>
     </template>
   </q-data-table>
 </template>
@@ -41,9 +44,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    req: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
+      row_val: {},
       config: {
         rowHeight: '50px',
         noHeader: true,
@@ -89,6 +97,9 @@ export default {
       }
       return this.items;
     },
+    isValid() {
+      return Object.values(this.row_val).every(p => p);
+    },
   },
   methods: {
     labels(full, compact) {
@@ -100,6 +111,14 @@ export default {
       }
       return full;
     },
+    updateRowVal(name, val) {
+      this.row_val[`${this.base_name}.${name}`] = val;
+      this.$emit('updateValidation', this.isValid);
+    },
+  },
+  mounted() {
+    this.$children[0].$children[1].$children
+      .forEach(row => this.$set(this.row_val, row.base_name, row.isValid));
   },
 };
 </script>

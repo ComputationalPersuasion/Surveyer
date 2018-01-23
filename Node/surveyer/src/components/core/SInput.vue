@@ -5,13 +5,13 @@
              :float-label="reqlabel"
              type="number"
              @blur="$v.value.$touch"
-             @change="notifyParent"/>
+             @change="notify"/>
     <q-input v-else
              v-model="value"
              :float-label="reqlabel"
              :type="type"
              @blur="$v.value.$touch"
-             @change="notifyParent"/>
+             @change="notify"/>
   </q-field>
 </template>
 
@@ -45,7 +45,6 @@ export default {
     isNumber() {
       return this.type === 'number';
     },
-
   },
   validations() {
     const v = {

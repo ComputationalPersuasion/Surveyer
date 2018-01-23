@@ -5,7 +5,8 @@
           type="number"
           :req="req"
           :min="min"
-          :max="max"/>
+          :max="max"
+          @updateValidation="notify"/>
 </template>
 
 <script>
@@ -42,11 +43,14 @@ export default {
     error_msg() {
       return `Please enter your age (between ${this.min} and ${this.max}).`;
     },
+    isValid() {
+      return this.$children[0].isValid;
+    },
   },
-  created() {
-    this.$on('updateVal', function updateVal(name, val) {
-      this.$parent.$emit('updateVal', name, val);
-    });
+  methods: {
+    notify(val) {
+      this.$emit('updateValidation', val);
+    },
   },
 };
 </script>

@@ -1,17 +1,24 @@
 <template>
-  <q-rating :max="size" color="primary" icon="brightness_1" v-model="value" size="1.2em" />
+  <q-field>
+    <q-rating v-model="value"
+              :color="color" icon="brightness_1" size="1.2em"
+              :max="size"
+              @change="change"/>
+  </q-field>
 </template>
 
 <script>
-import { QRating } from 'quasar-framework';
-import { SingleValued } from '../mixins';
+import { QRating, QField } from 'quasar-framework';
+import { requiredIf, minValue } from 'vuelidate/lib/validators';
+import { SingleValued, FormItem, Validable } from '../mixins';
 
 export default {
-  name: 'SLikertRating',
+  name: 's-liker-rating',
   components: {
     QRating,
+    QField,
   },
-  mixins: [SingleValued],
+  mixins: [SingleValued, FormItem, Validable],
   props: {
     size: {
       type: Number,
@@ -22,10 +29,29 @@ export default {
       default: null,
     },
   },
+  computed: {
+    color() {
+      return this.$v.value.$error ? 'negative' : 'primary';
+    },
+  },
   methods: {
     defaultValue() {
       return 0;
     },
+    change() {
+      this.$v.value.$touch();
+      this.notify();
+    },
+  },
+  validations() {
+    return {
+      value: {
+        requiredIf: requiredIf(function req() {
+          return this.req;
+        }),
+        minValue: minValue(1),
+      },
+    };
   },
 };
 </script>
@@ -33,5 +59,9 @@ export default {
 <style>
 .q-rating .q-icon + .q-icon {
   padding-left: 10px;
+}
+
+.q-field.row {
+  margin-top: 10px;
 }
 </style>

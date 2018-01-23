@@ -15,12 +15,9 @@ const Validable = {
     },
   },
   methods: {
-    notifyParent() {
-      this.$parent.$emit('updateVal', this.data_name, this.isValid);
+    notify() {
+      this.$emit('updateValidation', this.isValid);
     },
-  },
-  mounted() {
-    this.notifyParent();
   },
 };
 

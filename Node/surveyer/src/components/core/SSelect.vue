@@ -5,7 +5,7 @@
               :float-label="reqlabel"
               :filter="filter"
               @blur="$v.value.$touch"
-              @change="notifyParent"/>
+              @change="notify"/>
   </q-field>
 </template>
 
