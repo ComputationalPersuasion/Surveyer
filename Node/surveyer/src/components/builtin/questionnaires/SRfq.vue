@@ -40,7 +40,7 @@ export default {
     },
     req: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   methods: {

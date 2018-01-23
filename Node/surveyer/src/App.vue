@@ -20,7 +20,7 @@ Thank you.</h6>
             <s-input label="Prolific ID"
                     base_name="id"
                     error_message="Please enter a valid Prolific ID."
-                    req/>
+                    :req="!testing"/>
           </s-form>
         </s-question>
       </s-step>
@@ -34,18 +34,18 @@ Please proceed to the next page.</h6>
       </s-step>
 
       <s-step>
-        <s-tipi />
+        <s-tipi :req="!testing"/>
       </s-step>
 
       <s-step>
-        <s-rfq />
+        <s-rfq :req="!testing"/>
       </s-step>
 
       <s-step>
         <s-question question="Please enter some additional information.">
           <s-form base_name="demo">
-            <s-age base_name="age" req/>
-            <s-sex base_name="sex" req/>
+            <s-age base_name="age" :req="!testing"/>
+            <s-sex base_name="sex" :req="!testing"/>
           </s-form>
         </s-question>
       </s-step>
@@ -86,6 +86,11 @@ export default {
     SSurvey,
     SChat,
     SInput,
+  },
+  data() {
+    return {
+      testing: true,
+    };
   },
   methods: {
     rand: randCond,
