@@ -9,8 +9,8 @@
 
 <script>
 import { QRating, QField } from 'quasar-framework';
-import { requiredIf, minValue } from 'vuelidate/lib/validators';
-import { SingleValued, FormItem, Validable } from '../mixins';
+import { minValue } from 'vuelidate/lib/validators';
+import { CoreItem } from '../mixins';
 
 export default {
   name: 's-liker-rating',
@@ -18,7 +18,7 @@ export default {
     QRating,
     QField,
   },
-  mixins: [SingleValued, FormItem, Validable],
+  mixins: [CoreItem],
   props: {
     size: {
       type: Number,
@@ -42,16 +42,11 @@ export default {
       this.$v.value.$touch();
       this.notify();
     },
-  },
-  validations() {
-    return {
-      value: {
-        requiredIf: requiredIf(function req() {
-          return this.req;
-        }),
+    addValidations() {
+      return {
         minValue: minValue(1),
-      },
-    };
+      };
+    },
   },
 };
 </script>

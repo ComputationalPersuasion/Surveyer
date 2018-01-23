@@ -11,8 +11,7 @@
 
 <script>
 import { QSelect, QField } from 'quasar-framework';
-import { requiredIf } from 'vuelidate/lib/validators';
-import { SingleValued, FormItem, Validable } from '../mixins';
+import { CoreItem } from '../mixins';
 
 export default {
   name: 's-select',
@@ -20,7 +19,7 @@ export default {
     QSelect,
     QField,
   },
-  mixins: [SingleValued, FormItem, Validable],
+  mixins: [CoreItem],
   props: {
     items: {
       type: Array,
@@ -35,15 +34,6 @@ export default {
     options() {
       return this.items.map(it => ({ label: it.text, value: it.tag }));
     },
-  },
-  validations() {
-    return {
-      value: {
-        requiredIf: requiredIf(function req() {
-          return this.req;
-        }),
-      },
-    };
   },
 };
 </script>

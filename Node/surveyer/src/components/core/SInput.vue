@@ -17,8 +17,8 @@
 
 <script>
 import { QInput, QField } from 'quasar-framework';
-import { between, requiredIf } from 'vuelidate/lib/validators';
-import { FormItem, SingleValued, Validable } from '../mixins';
+import { between } from 'vuelidate/lib/validators';
+import { CoreItem } from '../mixins';
 
 export default {
   name: 's-input',
@@ -26,7 +26,7 @@ export default {
     QField,
     QInput,
   },
-  mixins: [SingleValued, FormItem, Validable],
+  mixins: [CoreItem],
   props: {
     type: {
       type: String,
@@ -46,18 +46,15 @@ export default {
       return this.type === 'number';
     },
   },
-  validations() {
-    const v = {
-      value: {
-        requiredIf: requiredIf(function req() {
-          return this.req;
-        }),
-      },
-    };
-    if (this.isNumber) {
-      v.value.between = between(this.min, this.max);
-    }
-    return v;
+  methods: {
+    addValidations() {
+      if (this.isNumber) {
+        return {
+          between: between(this.min, this.max),
+        };
+      }
+      return null;
+    },
   },
 };
 </script>

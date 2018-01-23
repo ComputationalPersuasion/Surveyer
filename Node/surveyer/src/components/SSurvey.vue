@@ -135,8 +135,6 @@ export default {
           };
         }(this, ind)));
         ind += 1;
-      } else if (node.componentOptions) {
-        console.log(node.componentOptions.tag);
       }
     });
   },
