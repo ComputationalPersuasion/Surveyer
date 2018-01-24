@@ -28,19 +28,17 @@ export default {
   },
   mounted() {
     let ind = 0;
-    this.$slots.default.forEach((node) => {
-      if (node.componentInstance) {
-        const valid = node.componentInstance.isValid;
-        if (valid !== undefined) {
-          this.question_valid_state.push(node.componentInstance.isValid);
-          node.componentInstance.$on('updateValidation', (function handler(s, index) {
-            return function update(val) {
-              s.$set(s.question_valid_state, index, val);
-              s.$emit('updateValidation', s.isValid);
-            };
-          }(this, ind)));
-          ind += 1;
-        }
+    this.$children.forEach((node) => {
+      const valid = node.isValid;
+      if (valid !== undefined) {
+        this.question_valid_state.push(node.isValid);
+        node.$on('updateValidation', (function handler(s, index) {
+          return function update(val) {
+            s.$set(s.question_valid_state, index, val);
+            s.$emit('updateValidation', s.isValid);
+          };
+        }(this, ind)));
+        ind += 1;
       }
     });
   },
