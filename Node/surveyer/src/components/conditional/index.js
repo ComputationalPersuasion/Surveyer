@@ -1,10 +1,13 @@
 const randCond = n => () => Math.floor(Math.random() * n);
-const otherCond = name => store => store.getters[`${name.replace('.', '/')}/value`];
+const randItemsCond = (...arr) => () => arr[Math.floor(Math.random() * arr.length)];
+const otherCond = name => store => () => store.getters[`${name.replace('.', '/')}/value`];
+const otherFunCond = (name, func) => store => () => func(store.getters[`${name.replace('.', '/')}/value`]);
 
 export {
   randCond,
   otherCond,
+  randItemsCond,
+  otherFunCond,
 };
 
-export { default as SCond } from './SCond';
-export { default as SCondBlock } from './SCondBlock';
+export { default as SWith } from './SWith';

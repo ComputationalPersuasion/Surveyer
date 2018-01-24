@@ -6,11 +6,11 @@
         <s-question>
           <h6 class="text-left canwrap">Hello and welcome,
 
-You are about to take part in an experiment in which you will be asked about your beliefs on different topics. For each topic, we will also present you with arguments extracted from actual debates taking place on a debating forum. These arguments are representing all points of view and do not reflect ours, only those of the participants of these debates. There is no right or wrong answer.
+            You are about to take part in an experiment in which you will be asked about your beliefs on different topics. For each topic, we will also present you with arguments extracted from actual debates taking place on a debating forum. These arguments are representing all points of view and do not reflect ours, only those of the participants of these debates. There is no right or wrong answer.
 
-In addition, it is completely anonymous and you can decide to withdraw from the experiment at any point in time.
+            In addition, it is completely anonymous and you can decide to withdraw from the experiment at any point in time.
 
-Thank you.</h6>
+            Thank you.</h6>
         </s-question>
       </s-step>
 
@@ -29,7 +29,7 @@ Thank you.</h6>
         <s-question>
           <h6 class="text-left canwrap">We will first start with some questions about yourself.
 
-Please proceed to the next page.</h6>
+            Please proceed to the next page.</h6>
         </s-question>
       </s-step>
 
@@ -50,22 +50,59 @@ Please proceed to the next page.</h6>
         </s-question>
       </s-step>
 
-      <s-step>
-        <s-question>
-          <h6 class="text-left canwrap">We are now going to ask you a few questions on how you feel about abortion. There is no right or wrong answer, all we are interested in is what you believe.</h6>
-        </s-question>
-      </s-step>
+      <template v-for="topic in args.themes">
+        <s-step :key="topic.tag + '-intro'">
+          <s-question>
+            <h6 class="text-left canwrap">We are now going to ask you a few questions on how you feel about {{topic.name}}.
+              There is no right or wrong answer, all we are interested in is what you believe.</h6>
+          </s-question>
+        </s-step>
+
+        <s-step :key="topic.tag + '-prefbel'">
+          <s-question :question="topic.question">
+            <s-form :base_name="'pre-' + topic.tag">
+              <s-likert-rating base_name="belief" :size="7" :req="!testing"/>
+            </s-form>
+          </s-question>
+        </s-step>
+
+        <s-step :key="topic.tag + '-arg'">
+          <s-with :base_name="topic.tag"
+                  :vars="{procon: otherFun('pre-' + topic.tag + '.belief', (val) => ((val < 3.5) ? 'pro' : 'con')),
+                          emotfact: randItems('emot', 'fact'),
+                          gainloss: randItems('gain', 'loss')}">
+            <template slot-scope="withV">
+              <s-question>
+                  <h6 class="text-left">
+                    {{topic.arguments[withV.vars.procon()][withV.vars.emotfact][withV.vars.gainloss]}}
+                  </h6>
+              </s-question>
+            </template>
+          </s-with>
+          <s-question question="How good do you think this argument is?">
+            <s-form :base_name="topic.tag">
+              <s-likert-rating base_name="good" :size="7" :req="!testing"/>
+            </s-form>
+          </s-question>
+          <s-question :question="topic.question">
+            <s-form :base_name="'post-' + topic.tag">
+              <s-likert-rating base_name="belief" :size="7" :req="!testing"/>
+            </s-form>
+          </s-question>
+        </s-step>
+      </template>
     </s-survey>
   </div>
 </template>
 
 <script>
 import { SSurvey, SStep, SQuestion } from './components';
-import { SCond, SCondBlock, randCond, otherCond } from './components/conditional';
+import { SWith, randCond, otherCond, randItemsCond, otherFunCond } from './components/conditional';
 import { SLikertTable, SChat } from './components/containers';
-import { SSelect, SLikertRadio, SLikertSlider, SForm, SInput } from './components/core';
+import { SSelect, SForm, SInput, SLikertRating } from './components/core';
 import { SSex, SAge } from './components/builtin/form';
 import { STipi, SRfq } from './components/builtin/questionnaires';
+import Arguments from './questionnaires/arguments';
 
 export default {
   name: 'app',
@@ -78,23 +115,28 @@ export default {
     STipi,
     SRfq,
     SSelect,
-    SLikertRadio,
-    SLikertSlider,
-    SCond,
-    SCondBlock,
+    SWith,
     SStep,
     SSurvey,
     SChat,
     SInput,
+    SLikertRating,
   },
   data() {
     return {
       testing: true,
     };
   },
+  computed: {
+    args() {
+      return Arguments;
+    },
+  },
   methods: {
     rand: randCond,
     other: otherCond,
+    randItems: randItemsCond,
+    otherFun: otherFunCond,
   },
 };
 </script>
