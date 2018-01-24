@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card class="question">
     <q-card-main>
       <h6 class="text-justify canwrap" v-if="question">{{question}} <span v-if="req" class="reqmark">*</span></h6>
       <slot>
@@ -58,3 +58,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.question + .question {
+  margin-top: 20px;
+}
+</style>

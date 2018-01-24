@@ -151,11 +151,11 @@ export default {
 }
 
 .canwrap {
-  white-space: pre-wrap;
-  font-weight: normal;
+  white-space: pre-line;
 }
 
 h6 {
   font-size: 15px;
+  font-weight: normal;
 }
 </style>
