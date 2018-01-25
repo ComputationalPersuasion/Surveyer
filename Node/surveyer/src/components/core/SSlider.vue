@@ -1,13 +1,13 @@
 <template>
   <q-field :error-label="error_message" :error="$v.value.$error">
-    <div class="row" v-if="show_bar_above">
+    <div class="row justify-between" v-if="show_bar_above">
       <div class="col-2 text-left">
         {{left_label}}
       </div>
-      <div class="col-2 offset-3 text-center">
+      <div class="col-2 text-center">
         {{center_label}}
       </div>
-      <div class="col-2 offset-3 text-right">
+      <div class="col-2 text-right">
         {{right_label}}
       </div>
     </div>
