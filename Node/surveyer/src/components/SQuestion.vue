@@ -3,7 +3,6 @@
     <q-card-main>
       <h6 class="text-justify canwrap" v-if="question">{{question}} <span v-if="req" class="reqmark">*</span></h6>
       <slot>
-        <span>No question asked.</span>
       </slot>
     </q-card-main>
   </q-card>
@@ -40,6 +39,9 @@ export default {
   },
   mounted() {
     let ind = 0;
+    if (this.$slots.default === undefined) {
+      return;
+    }
     this.$slots.default.forEach((node) => {
       if (node.componentInstance) {
         const valid = node.componentInstance.isValid;

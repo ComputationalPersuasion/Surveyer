@@ -3,15 +3,13 @@
     <s-survey>
       <h1 slot="header">Arguments</h1>
       <s-step>
-        <s-question>
-          <h6 class="text-left canwrap">Hello and welcome,
+        <s-question question="Hello and welcome,
 
             You are about to take part in an experiment in which you will be asked about your beliefs on different topics. For each topic, we will also present you with arguments extracted from actual debates taking place on a debating forum. These arguments are representing all points of view and do not reflect ours, only those of the participants of these debates. There is no right or wrong answer.
 
             In addition, it is completely anonymous and you can decide to withdraw from the experiment at any point in time.
 
-            Thank you.</h6>
-        </s-question>
+            Thank you."/>
       </s-step>
 
       <s-step>
@@ -26,11 +24,9 @@
       </s-step>
 
       <s-step>
-        <s-question>
-          <h6 class="text-left canwrap">We will first start with some questions about yourself.
+        <s-question question="We will first start with some questions about yourself.
 
-            Please proceed to the next page.</h6>
-        </s-question>
+            Please proceed to the next page."/>
       </s-step>
 
       <s-step>
@@ -52,10 +48,8 @@
 
       <template v-for="topic in args.themes">
         <s-step :key="topic.tag + '-intro'">
-          <s-question>
-            <h6 class="text-left canwrap">We are now going to ask you a few questions on how you feel about {{topic.name}}.
-              There is no right or wrong answer, all we are interested in is what you believe.</h6>
-          </s-question>
+          <s-question :question="`We are now going to ask you a few questions on how you feel about ${topic.name}.
+              There is no right or wrong answer, all we are interested in is what you believe.`"/>
         </s-step>
 
         <s-step :key="topic.tag + '-prefbel'">
@@ -72,7 +66,6 @@
                         center_label="Neutral"
                         right_label="Yes"
                         :req="!testing"/>
-              <!-- <s-likert-rating base_name="belief" :size="7" :req="!testing"/>-->
             </s-form>
           </s-question>
         </s-step>
@@ -103,7 +96,6 @@
                         right_label="Good"
                         :label_value="label => `${parseFloat(label).toFixed(2)}`"
                         :req="!testing"/>
-              <!--<s-likert-rating base_name="good" :size="7" :req="!testing"/>-->
             </s-form>
           </s-question>
           <s-question :question="topic.question">
@@ -119,7 +111,6 @@
                         center_label="Neutral"
                         right_label="Yes"
                         :req="!testing"/>
-              <!--<s-likert-rating base_name="belief" :size="7" :req="!testing"/>-->
             </s-form>
           </s-question>
         </s-step>
