@@ -13,14 +13,7 @@
       </s-step>
 
       <s-step>
-        <s-question question="Please enter your Prolific ID.">
-          <s-form base_name="prolific">
-            <s-input label="Prolific ID"
-                    base_name="id"
-                    error_message="Please enter a valid Prolific ID."
-                    :req="!testing"/>
-          </s-form>
-        </s-question>
+        <s-prolific-id :req="!testing"/>
       </s-step>
 
       <s-step>
@@ -124,7 +117,7 @@ import { SSurvey, SStep, SQuestion } from './components';
 import { SWith, randCond, otherCond, randItemsCond, otherFunCond } from './components/conditional';
 import { SLikertTable, SChat } from './components/containers';
 import { SSelect, SForm, SInput, SLikertRating, SSlider } from './components/core';
-import { SSex, SAge } from './components/builtin/form';
+import { SSex, SAge, SProlificId } from './components/builtin/form';
 import { STipi, SRfq } from './components/builtin/questionnaires';
 import Arguments from './questionnaires/arguments';
 
@@ -146,6 +139,7 @@ export default {
     SInput,
     SLikertRating,
     SSlider,
+    SProlificId,
   },
   data() {
     return {
