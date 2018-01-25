@@ -79,7 +79,7 @@
 
         <s-step :key="topic.tag + '-arg'">
           <s-with :base_name="topic.tag"
-                  :vars="{procon: otherFun('pre-' + topic.tag + '.belief', (val) => ((val < 3.5) ? 'pro' : 'con')),
+                  :vars="{procon: otherFun('pre-' + topic.tag + '.belief', (val) => ((val < 0) ? 'pro' : 'con')),
                           emotfact: randItems('emot', 'fact'),
                           gainloss: randItems('gain', 'loss')}">
             <template slot-scope="withV">

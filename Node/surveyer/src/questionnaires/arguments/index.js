@@ -17,7 +17,7 @@ const Arguments = {
       con: {
         emot: {
           gain: 'As long as abortion is legal, men\'s right to procreate might not be respected! Men should have as many "rights" and responibilites as women.',
-          loss: 'As long as abortion is legal, men might be denied the right to procreate! Men are left with fewer "rights" and additional responsibilities as women.',
+          loss: 'As long as abortion is legal, men might be denied the right to procreate! Men are left with fewer "rights" and additional responsibilities than women.',
         },
         fact: {
           gain: ' We already have great alternatives to having abortions. Scientifically-accurate sex-ed, contraception, support of pregnant women and new families.',
