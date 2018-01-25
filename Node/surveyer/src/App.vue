@@ -61,7 +61,18 @@
         <s-step :key="topic.tag + '-prefbel'">
           <s-question :question="topic.question">
             <s-form :base_name="'pre-' + topic.tag">
-              <s-likert-rating base_name="belief" :size="7" :req="!testing"/>
+              <s-slider base_name="belief"
+                        :min="-5"
+                        :max="5"
+                        :step="0.01"
+                        :snap="false"
+                        :markers="false"
+                        :label_value="label => `${parseFloat(label).toFixed(2)}`"
+                        left_label="No"
+                        center_label="Neutral"
+                        right_label="Yes"
+                        :req="!testing"/>
+              <!-- <s-likert-rating base_name="belief" :size="7" :req="!testing"/>-->
             </s-form>
           </s-question>
         </s-step>
@@ -81,12 +92,34 @@
           </s-with>
           <s-question question="How good do you think this argument is?">
             <s-form :base_name="topic.tag">
-              <s-likert-rating base_name="good" :size="7" :req="!testing"/>
+              <s-slider base_name="good"
+                        :min="-5"
+                        :max="5"
+                        :step="0.01"
+                        :snap="false"
+                        :markers="false"
+                        left_label="Bad"
+                        center_label="Neutral"
+                        right_label="Good"
+                        :label_value="label => `${parseFloat(label).toFixed(2)}`"
+                        :req="!testing"/>
+              <!--<s-likert-rating base_name="good" :size="7" :req="!testing"/>-->
             </s-form>
           </s-question>
           <s-question :question="topic.question">
             <s-form :base_name="'post-' + topic.tag">
-              <s-likert-rating base_name="belief" :size="7" :req="!testing"/>
+              <s-slider base_name="belief"
+                        :min="-5"
+                        :max="5"
+                        :step="0.01"
+                        :snap="false"
+                        :markers="false"
+                        :label_value="label => `${parseFloat(label).toFixed(2)}`"
+                        left_label="No"
+                        center_label="Neutral"
+                        right_label="Yes"
+                        :req="!testing"/>
+              <!--<s-likert-rating base_name="belief" :size="7" :req="!testing"/>-->
             </s-form>
           </s-question>
         </s-step>
@@ -99,7 +132,7 @@
 import { SSurvey, SStep, SQuestion } from './components';
 import { SWith, randCond, otherCond, randItemsCond, otherFunCond } from './components/conditional';
 import { SLikertTable, SChat } from './components/containers';
-import { SSelect, SForm, SInput, SLikertRating } from './components/core';
+import { SSelect, SForm, SInput, SLikertRating, SSlider } from './components/core';
 import { SSex, SAge } from './components/builtin/form';
 import { STipi, SRfq } from './components/builtin/questionnaires';
 import Arguments from './questionnaires/arguments';
@@ -121,6 +154,7 @@ export default {
     SChat,
     SInput,
     SLikertRating,
+    SSlider,
   },
   data() {
     return {
