@@ -87,7 +87,7 @@
                         left_label="Bad"
                         center_label="Neutral"
                         right_label="Good"
-                        :label_value="label => `${parseFloat(label).toFixed(2)}`"
+                        decimals="2"
                         :req="!testing"/>
             </s-form>
           </s-question>
@@ -99,7 +99,7 @@
                         :step="0.01"
                         :snap="false"
                         :markers="false"
-                        :label_value="label => `${parseFloat(label).toFixed(2)}`"
+                        decimals="2"
                         left_label="No"
                         center_label="Neutral"
                         right_label="Yes"

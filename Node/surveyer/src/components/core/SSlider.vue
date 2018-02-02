@@ -19,6 +19,7 @@
               :step="step"
               :label="with_label"
               :label-value="label_value(value)"
+              :decimals="decimals"
               :snap="snap"
               :markers="markers"
               :fill-handle-always="fill_handle"
@@ -74,6 +75,10 @@ export default {
     label_value: {
       type: Function,
       default: value => `${value}`,
+    },
+    decimals: {
+      type: Number,
+      default: 0,
     },
     fill_handle: {
       type: Boolean,
