@@ -4,7 +4,8 @@
       <s-input :label="label"
                :base_name="base_name"
                :error_message="error_message"
-               :req="req"/>
+               :req="req"
+               @updateValidation="notify"/>
     </s-form>
   </s-question>
 </template>
@@ -40,6 +41,16 @@ export default {
     req: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    isValid() {
+      return this.$children[0].isValid;
+    },
+  },
+  methods: {
+    notify(val) {
+      this.$emit('updateValidation', val);
     },
   },
 };

@@ -117,7 +117,8 @@ import { SSurvey, SStep, SQuestion } from './components';
 import { SWith, randCond, otherCond, randItemsCond, otherFunCond } from './components/conditional';
 import { SLikertTable, SChat } from './components/containers';
 import { SSelect, SForm, SInput, SLikertRating, SSlider } from './components/core';
-import { SSex, SAge, SProlificId } from './components/builtin/form';
+import { SSex, SAge } from './components/builtin/form';
+import SProlificId from './components/builtin/questions/SProlificId';
 import { STipi, SRfq } from './components/builtin/questionnaires';
 import Arguments from './questionnaires/arguments';
 
