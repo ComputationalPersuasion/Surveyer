@@ -79,6 +79,10 @@ export default {
       type: String,
       default: 'survey',
     },
+    submit_function: {
+      type: Function,
+      required: true,
+    },
   },
   computed: {
     firstpage() {
@@ -116,6 +120,7 @@ export default {
     submit() {
       this.increment();
       this.submitted = true;
+      this.submit_function();
     },
     updateStepVal(id, val) {
       this.$set(this.step_valid_state, id, val);
@@ -152,6 +157,8 @@ export default {
 
 .canwrap {
   white-space: pre-line;
+  margin-left: 4%;
+  margin-right: 4%;
 }
 
 h6 {
