@@ -1,5 +1,5 @@
 <template>
-  <q-field>
+  <q-field :label="label">
     <q-rating v-model="value"
               :color="color" icon="brightness_1" size="1.2em"
               :max="size"
@@ -23,10 +23,6 @@ export default {
     size: {
       type: Number,
       default: 5,
-    },
-    labels: {
-      type: Array,
-      default: null,
     },
   },
   computed: {
