@@ -33,9 +33,12 @@ export default {
     };
   },
   created() {
-    this.$store.registerModule(this.base_name.split('.'), {
-      namespaced: true,
-    });
+    /* eslint no-underscore-dangle: "off" */
+    if (!(`${this.base_name.replace('.', '/')}/` in this.$store._modulesNamespaceMap)) {
+      this.$store.registerModule(this.base_name.split('.'), {
+        namespaced: true,
+      });
+    }
   },
   mounted() {
     let ind = 0;
