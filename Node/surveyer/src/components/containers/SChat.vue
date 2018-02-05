@@ -2,7 +2,7 @@
   <div class="row justify-center">
     <div class="col-6">
       <div class="column">
-        <div class="chatbox text-left round-borders q-field">
+        <div class="chatbox text-left round-borders q-field" ref="chatbox">
           <div class="text-center" v-if="messages.length === 0">
             No messages yet.
           </div>
@@ -13,12 +13,12 @@
         </div>
         <div>
           <q-input v-model="tosend"
-                   :disable="disabled_input"
-                   :after="[{icon: 'send', handler: handleSend}]"
-                   @keypress.enter="handleSend"
-                   disabled
-                   inverted color="primary"
-                   class="no-margin"/>
+                  :disable="disabled_input"
+                  :after="[{icon: 'send', handler: handleSend}]"
+                  @keypress.enter="handleSend"
+                  disabled
+                  inverted color="primary"
+                  class="no-margin"/>
         </div>
       </div>
     </div>
@@ -27,10 +27,13 @@
 
 <script>
 import axios from 'axios';
-import { Dialog, QChatMessage, QInput } from 'quasar-framework';
+import { Dialog, QChatMessage, QInput, format, scroll } from 'quasar-framework';
 import { SAge } from '../builtin/form';
 import { SLikertRating } from '../core';
 import SChatMessage from './SChatMessage';
+
+const { capitalize } = format;
+const { animScrollTo, getScrollPosition } = scroll;
 
 export default {
   name: 's-chat',
@@ -45,7 +48,13 @@ export default {
     return {
       messages: [],
       tosend: '',
+      valid: false,
     };
+  },
+  computed: {
+    isValid() {
+      return this.valid;
+    },
   },
   props: {
     disabled_input: {
@@ -54,9 +63,29 @@ export default {
     },
   },
   methods: {
+    delayMessage(msg, timeout, merge = false) {
+      const fn = merge
+        ? () => this.messages[this.messages.length - 1].msgs.push(msg)
+        : () => this.messages.push(msg);
+      return new Promise(resolve => setTimeout(() => {
+        fn();
+        animScrollTo(this.$refs.chatbox, getScrollPosition(this.$refs.chatbox) + 100, 500);
+        resolve();
+      }, timeout));
+    },
+    terminateDialog() {
+      return this.delayMessage({
+        msgs: ['We do not have any additional argument to present.', 'Please proceed to the next page.'],
+        from: 'Me',
+      }, 1000).then(() => this.validateChat());
+    },
+    validateChat() {
+      this.valid = true;
+      this.$emit('updateValidation', true);
+    },
     startConversation() {
       this.messages.push({
-        msgs: ['Hi!', 'Please note that you cannot type in your aswers.'],
+        msgs: ['Hi!', 'Please note that you cannot type in your answers.', 'Let\'s start with a simple question.'],
         from: 'Me',
       });
       axios.post('http://localhost:5000/firstcontact', {
@@ -68,41 +97,24 @@ export default {
           A: this.$store.getters['tipi/A'],
           N: this.$store.getters['tipi/N'],
           sex: this.$store.getters['demo/sex/value'],
+          initbel: this.$store.getters['belief/pre/value'],
+          initbelgov: this.$store.getters['beliefgov/pre/value'],
         },
       }).then((response) => {
-        this.messages.push({
+        this.delayMessage({
           msgs: [
-            'Let\'s start with a simple question.',
-            response.data.arg,
+            capitalize(response.data.arg),
           ],
           from: 'Me',
-        });
-        const cArgs = response.data.cArgs.map(
-          arg => ({
-            label: arg.arg,
-            value: arg.tag }));
-        this.askCounterArguments(response.data.arg, cArgs);
+        }, 1000).then(() => this.askCounterArguments([response.data], 1000));
       });
     },
-    /* askAge() {
-      this.messages.push({
-        text: 'Can I ask you your age?',
-        type: 'age',
-      });
-    },
-    askSex() {
-      this.messages.push({
-        text: 'What is your sex?',
-        type: 'sex',
-      });
-    }, */
-    askCounterArguments(originalArg, counterArgs) {
-      this.messages.push({
+    askCounterArguments(args, timeout) {
+      return this.delayMessage({
         text: 'Please click to select you answer(s).',
         type: 'arg',
-        arg: originalArg,
-        cArgs: counterArgs,
-      });
+        arguments: args,
+      }, timeout);
     },
     handleSend() {
       if (!this.disabled_input) {
@@ -112,98 +124,71 @@ export default {
     showDialog(msg) {
       switch (msg.type) {
         case 'arg':
-          this.showArgDialog(msg.arg, msg.cArgs);
+          this.showArgDialog(msg.arguments);
           break;
-        /* case 'age':
-          this.showAgeDialog();
-          break;
-        case 'sex':
-          this.showSexDialog();
-          break; */
         default:
           break;
       }
     },
-    showSexDialog() {
-      Dialog.create({
-        title: 'Please select your sex from the list below.',
-        form: {
-          sex: {
-            type: 'radio',
-            model: '',
-            items: [
-              { label: 'Female', value: 'Female' },
-              { label: 'Male', value: 'Male' },
-              { label: 'Other', value: 'Other' },
-            ],
-          },
-        },
-        buttons: [
-          'Cancel',
-          {
-            label: 'Ok',
-            handler: (data) => {
-              this.messages.pop();
-              this.messages.push({
-                msgs: [data.sex],
-                from: 'You',
-                sent: true,
-              });
-            },
-          },
-        ],
+    showArgDialog(args) {
+      const formObj = {};
+      args.forEach((a) => {
+        if (a.cArgs.length === 0) {
+          return;
+        }
+        formObj[`${a.tag}h`] = {
+          type: 'heading',
+          label: capitalize(a.arg),
+        };
+        const capCArgs = a.cArgs.map(
+          arg => ({ value: arg.tag, label: `${capitalize(arg.arg)}.` }));
+        formObj[a.tag] = {
+          type: 'checkbox',
+          model: [],
+          items: capCArgs,
+        };
       });
-    },
-    showAgeDialog() {
       Dialog.create({
-        title: 'Please enter your age below.',
-        form: {
-          age: {
-            type: 'number',
-            min: 1,
-            max: 99,
-            label: 'Age',
-          },
-        },
-        buttons: [
-          'Cancel',
-          {
-            label: 'Ok',
-            handler: (data) => {
-              this.messages.pop();
-              this.messages.push({
-                msgs: [data.age],
-                from: 'You',
-                sent: true,
-              });
-            },
-          },
-        ],
-      });
-    },
-    showArgDialog(arg, cArgs) {
-      Dialog.create({
-        title: arg,
-        message: 'Please select the answer(s) that are explaining your situation.',
-        form: {
-          args: {
-            type: 'checkbox',
-            model: [],
-            items: cArgs,
-          },
-        },
+        title: 'Please select the answer(s) that are best explaining your situation for each argument.',
+        form: formObj,
         buttons: [
           'Cancel',
           {
             label: 'Select',
             handler: (data) => {
+              let counterTags = [];
+              const argsLbl = [];
               this.messages.pop();
+              Object.keys(data).forEach((tag) => {
+                const a = args.filter(arg => arg.tag === tag)[0];
+                counterTags = counterTags.concat(data[tag]);
+                data[tag].forEach((cTag) => {
+                  argsLbl.push(a.cArgs.filter(c => c.tag === cTag)[0].arg);
+                });
+              });
               this.messages.push({
-                msgs: [data.args.map(
-                tag => cArgs.filter(
-                  p => p.value === tag)[0].label).join(' and ')],
+                msgs: [`${capitalize(argsLbl.join(' and '))}.`],
                 from: 'You',
                 sent: true,
+              });
+              axios.post('http://localhost:5000/post_arguments', {
+                userid: this.$store.getters['prolific/id/value'],
+                args: counterTags,
+              }).then((response) => {
+                const [first, ...rest] = response.data;
+                let prom = this.delayMessage({
+                  msgs: [`${capitalize(first.arg)}.`],
+                  from: 'Me',
+                }, 1000);
+                rest.forEach((arg) => {
+                  prom = prom.then(() => this.delayMessage(`${capitalize(arg.arg)}.`, 1000, true));
+                });
+                prom.then(() => {
+                  if (response.data.every(a => a.cArgs.length === 0)) {
+                    return this.terminateDialog();
+                  }
+                  return this.askCounterArguments(response.data, 1000);
+                });
               });
             },
           },
@@ -216,9 +201,13 @@ export default {
 
 <style>
 .chatbox {
-  padding: 10px 5px;
+  padding: 10px 20px;
   border: solid 1px lightgrey;
   height: 400px;
   overflow: auto;
+}
+
+.modal-scroll {
+  max-height: 300px;
 }
 </style>
