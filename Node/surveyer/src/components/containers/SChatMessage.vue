@@ -34,3 +34,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.q-message-received .q-message-text:last-child:before {
+  z-index: -1;
+}
+</style>
