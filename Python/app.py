@@ -2,6 +2,9 @@ from flask import Flask, request, Response, jsonify
 import csv
 from participant import Participant
 from inputs import trees, args
+from operator import itemgetter
+import itertools
+import random
 
 app = Flask(__name__)
 
@@ -11,13 +14,23 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
   return response
 
+NUMOFDEFENDERS = 1
+
 rows = {}
+
+def transform_atkers(atkers):
+  lst = list(map(lambda a: {'arg': a.arg, 'tag': a.tag}, atkers))
+  random.shuffle(lst)
+  return lst
 
 def initial_argument():
   return {'arg': args['init'].arg,
-          'cArgs': list(map(lambda a: {'arg': a.arg, 'tag': a.tag}, args['init'].atkers))}
+          'tag': args['init'].tag,
+          'cArgs': transform_atkers(args['init'].atkers)}
 
 def test_pair(t1, t2, features):
+  if t1 == t2:
+    return t1
   pair = (t1, t2)
   if pair not in trees:
     pair = (t2, t1)
@@ -26,7 +39,7 @@ def test_pair(t1, t2, features):
   return trees[pair](features)
 
 def count_preferred_topics(arg1, arg2, features):
-  count = (0, 0)
+  count = [0, 0]
   for t1 in arg1.types:
     for t2 in arg2.types:
       if t1 == t2:
@@ -63,14 +76,17 @@ def preferred(arg1, arg2, features):
 def counter_args_preferred_count(arg, features):
   counter_args = arg.atkers
   count = {}
-  for arg in counter_args.map(lambda arg: arg.tag):
-    count[arg] = 0
-  for (arg1, arg2) in zip(counter_args, counter_args):
+  for tag in map(lambda arg: arg.tag, counter_args):
+    count[tag] = 0
+  for (arg1, arg2) in itertools.combinations(counter_args, 2):
     if arg1.tag == arg2.tag:
       continue
     pref = preferred(arg1, arg2, features)
     count[pref.tag] += 1
   return count
+
+def choose_args_to_attack(chosen_args):
+  return chosen_args
 
 @app.route('/firstcontact', methods=['POST'])
 def first_contact():
@@ -88,6 +104,20 @@ def post_arguments():
   userid = json['userid']
   chosen_args = list(map(lambda t: args[t], json['args']))
   rows[userid].args.append(list(map(lambda a: a.tag, chosen_args)))
+  args_to_attack = choose_args_to_attack(chosen_args)
+  resp = []
+  defense = set()
+  for a in args_to_attack:
+    count = counter_args_preferred_count(a, rows[userid].features)
+    sorted_count = sorted(count, key=lambda p: count[p], reverse=True)
+    defense.update(sorted_count[0:NUMOFDEFENDERS])
+  for tag in defense:
+    arg = args[tag]
+    atkers = transform_atkers(arg.atkers)
+    resp.append({'arg': arg.arg,
+                 'tag': arg.tag,
+                 'cArgs': atkers})
+  return jsonify(resp)
 
 @app.route('/submit', methods=['POST'])
 def submit():
