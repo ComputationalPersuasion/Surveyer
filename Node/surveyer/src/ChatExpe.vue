@@ -43,10 +43,26 @@
                       :req="!testing"/>
           </s-form>
         </s-question>
+        <s-question question="What is your position on the government investing in initiatives and infrastructures for cyclists?" :req="!testing">
+          <s-form base_name="beliefgov">
+            <s-slider error_message="Please select a value on the slider."
+                      left_label="Negative"
+                      center_label="Neutral"
+                      right_label="Positive"
+                      base_name="pre"
+                      :min="-5"
+                      :max="5"
+                      :decimals="2"
+                      :step="0.01"
+                      :snap="false"
+                      :markers="false"
+                      :req="!testing"/>
+          </s-form>
+        </s-question>
       </s-step>
 
       <s-step>
-        <s-question question="Please read and interact with the chat box below.">
+        <s-question question="Please read and interact with the chat box below." :req="!testing">
           <q-btn v-if="!conversation_started"
                  color='primary' class="q-field"
                  @click="startConversation">
@@ -54,6 +70,41 @@
           </q-btn>
           <s-chat v-show="conversation_started"
                   disabled_input ref="chatbox"/>
+        </s-question>
+      </s-step>
+
+      <s-step>
+        <s-question question="What is your position toward cycling from home to work?" :req="!testing">
+          <s-form base_name="belief">
+            <s-slider error_message="Please select a value on the slider."
+                      left_label="Negative"
+                      center_label="Neutral"
+                      right_label="Positive"
+                      base_name="post"
+                      :min="-5"
+                      :max="5"
+                      :decimals="2"
+                      :step="0.01"
+                      :snap="false"
+                      :markers="false"
+                      :req="!testing"/>
+          </s-form>
+        </s-question>
+        <s-question question="What is your position on the government investing in initiatives and infrastructures for cyclists?" :req="!testing">
+          <s-form base_name="beliefgov">
+            <s-slider error_message="Please select a value on the slider."
+                      left_label="Negative"
+                      center_label="Neutral"
+                      right_label="Positive"
+                      base_name="post"
+                      :min="-5"
+                      :max="5"
+                      :decimals="2"
+                      :step="0.01"
+                      :snap="false"
+                      :markers="false"
+                      :req="!testing"/>
+          </s-form>
         </s-question>
       </s-step>
 
