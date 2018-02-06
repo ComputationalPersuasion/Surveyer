@@ -130,6 +130,9 @@ export default {
           break;
       }
     },
+    capitalizeArg(arg) {
+      return `${capitalize(arg)}${arg.endsWith('?') ? '' : '.'}`;
+    },
     showArgDialog(args) {
       const formObj = {};
       args.forEach((a) => {
@@ -138,7 +141,7 @@ export default {
         }
         formObj[`${a.tag}h`] = {
           type: 'heading',
-          label: capitalize(a.arg),
+          label: this.capitalizeArg(a.arg),
         };
         const capCArgs = a.cArgs.map(
           arg => ({ value: arg.tag, label: `${capitalize(arg.arg)}.` }));
@@ -177,11 +180,12 @@ export default {
               }).then((response) => {
                 const [first, ...rest] = response.data;
                 let prom = this.delayMessage({
-                  msgs: [`${capitalize(first.arg)}.`],
+                  msgs: [this.capitalizeArg(first.arg)],
                   from: 'Me',
                 }, 1000);
                 rest.forEach((arg) => {
-                  prom = prom.then(() => this.delayMessage(`${capitalize(arg.arg)}.`, 1000, true));
+                  prom = prom.then(() =>
+                    this.delayMessage(this.capitalizeArg(arg.arg), 1000, true));
                 });
                 prom.then(() => {
                   if (response.data.every(a => a.cArgs.length === 0)) {
