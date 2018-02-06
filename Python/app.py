@@ -15,6 +15,7 @@ def after_request(response):
   return response
 
 NUMOFDEFENDERS = 1
+MAXNUMTODEF = 4
 
 rows = {}
 
@@ -86,7 +87,13 @@ def counter_args_preferred_count(arg, features):
   return count
 
 def choose_args_to_attack(chosen_args):
-  return chosen_args
+  to_atk = chosen_args
+  if len(chosen_args) > 1:
+    to_atk = list(filter(lambda a: args['g2'] not in a.atkers, chosen_args))
+  if len(to_atk) > MAXNUMTODEF:
+    random.shuffle(to_atk)
+    to_atk = to_atk[0:MAXNUMTODEF]
+  return to_atk
 
 @app.route('/firstcontact', methods=['POST'])
 def first_contact():
