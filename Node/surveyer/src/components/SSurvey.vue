@@ -1,11 +1,15 @@
 <template>
   <q-layout @updateStep="updateStepVal">
-    <div class="animate-fade">
-      <slot name="header"></slot>
+    <div class="row justify-center">
+      <div class="col-xs-10 col-xl-8">
+        <div class="animate-fade">
+          <slot name="header"></slot>
+        </div>
+      </div>
     </div>
 
     <div class="row justify-center">
-      <div class="col-10">
+      <div class="col-xs-10 col-xl-8">
         <slot></slot>
       </div>
     </div>
@@ -14,17 +18,17 @@
       <q-card flat>
         <q-card-main>
           <div class="row">
-            <div class="col-1">
+            <div class="col-xs-2 col-md-1 offset-xl-1">
               <q-btn v-if="!emptysteps && !firstpage"
                      class="stepper" round small
                      icon="keyboard_arrow_left" color="primary"
                      v-back-to-top.animate="{offset: -1, duration: 200}"
                      @click="decrement"/>
             </div>
-            <div class="col">
+            <div class="col-xs-8 col-md-10 col-xl-8">
               <q-progress :percentage="percentage" color="primary" style="height: 20px;top: 10px" />
             </div>
-            <div class="col-1">
+            <div class="col-xs-2 col-md-1">
               <q-btn v-if="!lastpage && !emptysteps"
                      :disabled="!isCurrentStepValid"
                      class="stepper" small round

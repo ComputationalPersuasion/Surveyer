@@ -1,6 +1,6 @@
 <template>
   <div class="row form">
-    <div class="col-4 offset-1">
+    <div class="col-md-6 col-xl-4 offset-md-1">
       <slot>
         No question.
       </slot>
