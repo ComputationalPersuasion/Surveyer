@@ -5,6 +5,7 @@ from inputs import trees, args
 from operator import itemgetter
 import itertools
 import random
+import os.path
 
 app = Flask(__name__)
 
@@ -130,7 +131,13 @@ def post_arguments():
 def submit():
   json = request.get_json()
   userid = json['userid']
+  if 'features' in json:
+    features = json['features']
+    rows[userid].features.update(json['features'])
+  write_header = not os.path.exists('data.csv')
   with open('data.csv', 'a', newline='') as csvfile:
     w = csv.writer(csvfile, delimiter=';')
+    if write_header:
+        w.writerow(rows[userid].header())
     w.writerow(rows[userid].to_arr())
   return '', 200

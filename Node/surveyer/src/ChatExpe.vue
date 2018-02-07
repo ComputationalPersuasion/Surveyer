@@ -158,6 +158,10 @@ export default {
       this.$refs.submit.show();
       axios.post('http://localhost:5000/submit', {
         userid: this.$store.getters['prolific/id/value'],
+        features: {
+          postbel: this.$store.getters['belief/post/value'],
+          postbelgov: this.$store.getters['beliefgov/post/value'],
+        },
       });
     },
   },

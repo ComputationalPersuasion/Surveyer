@@ -158,9 +158,13 @@ export default {
           'Cancel',
           {
             label: 'Select',
-            handler: (data) => {
+            preventClose: true,
+            handler: (data, close) => {
               let counterTags = [];
               const argsLbl = [];
+              if (Object.values(data).some(choices => choices.length === 0)) {
+                return;
+              }
               this.messages.pop();
               Object.keys(data).forEach((tag) => {
                 const a = args.filter(arg => arg.tag === tag)[0];
@@ -193,6 +197,7 @@ export default {
                   }
                   return this.askCounterArguments(response.data, 1000);
                 });
+                close();
               });
             },
           },
