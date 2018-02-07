@@ -62,7 +62,8 @@
       </s-step>
 
       <s-step>
-        <s-question question="Please read and interact with the chat box below." :req="!testing">
+        <s-question question="Please read and interact with the chat box below.
+        You will not be able to type in your answer. However, you will be able to click on messages when instructed to do so." :req="!testing">
           <q-btn v-if="!conversation_started"
                  color='primary' class="q-field"
                  @click="startConversation">
