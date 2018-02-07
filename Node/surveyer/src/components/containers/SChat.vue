@@ -85,7 +85,7 @@ export default {
     },
     startConversation() {
       this.messages.push({
-        msgs: ['Hi!', 'Please note that you cannot type in your answers.', 'Let\'s start with a simple question.'],
+        msgs: ['Hi!', 'Let\'s start with a simple question.'],
         from: 'Me',
       });
       axios.post('http://localhost:5000/firstcontact', {
