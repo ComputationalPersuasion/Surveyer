@@ -165,4 +165,8 @@ h6 {
   font-size: 15px;
   font-weight: normal;
 }
+
+h1 {
+  font-weight: 200;
+}
 </style>
