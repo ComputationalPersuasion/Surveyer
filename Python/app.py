@@ -110,6 +110,8 @@ def first_contact():
 def post_arguments():
   json = request.get_json()
   userid = json['userid']
+  resp = []
+  if json['args']:
   chosen_args = list(map(lambda t: args[t], json['args']))
   rows[userid].args.append(list(map(lambda a: a.tag, chosen_args)))
   args_to_attack = choose_args_to_attack(chosen_args)

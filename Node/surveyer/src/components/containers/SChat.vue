@@ -145,6 +145,9 @@ export default {
         };
         const capCArgs = a.cArgs.map(
           arg => ({ value: arg.tag, label: `${capitalize(arg.arg)}.` }));
+        if (a.tag !== 'init') {
+          capCArgs.push({ value: 'none', label: 'None of the above.' });
+        }
         formObj[a.tag] = {
           type: 'checkbox',
           model: [],
@@ -167,37 +170,52 @@ export default {
               }
               this.messages.pop();
               Object.keys(data).forEach((tag) => {
+                if (data[tag].includes('none')) {
+                  return;
+                }
                 const a = args.filter(arg => arg.tag === tag)[0];
                 counterTags = counterTags.concat(data[tag]);
                 data[tag].forEach((cTag) => {
                   argsLbl.push(a.cArgs.filter(c => c.tag === cTag)[0].arg);
                 });
               });
-              this.messages.push({
-                msgs: [`${capitalize(argsLbl.join(' and '))}.`],
-                from: 'You',
-                sent: true,
-              });
+              if (argsLbl.length === 0) {
+                this.messages.push({
+                  msgs: ['None of the above.'],
+                  from: 'You',
+                  sent: true,
+                });
+              } else {
+                this.messages.push({
+                  msgs: [`${capitalize(argsLbl.join(' and '))}.`],
+                  from: 'You',
+                  sent: true,
+                });
+              }
               axios.post('http://localhost:5000/post_arguments', {
                 userid: this.$store.getters['prolific/id/value'],
                 args: counterTags,
               }).then((response) => {
-                const [first, ...rest] = response.data;
-                let prom = this.delayMessage({
-                  msgs: [this.capitalizeArg(first.arg)],
-                  from: 'Me',
-                }, 1000);
-                rest.forEach((arg) => {
-                  prom = prom.then(() =>
-                    this.delayMessage(this.capitalizeArg(arg.arg), 1000, true));
-                });
-                prom.then(() => {
-                  if (response.data.every(a => a.cArgs.length === 0)) {
-                    return this.terminateDialog();
-                  }
-                  return this.askCounterArguments(response.data, 1000);
-                });
                 close();
+                if (response.data.length === 0) {
+                  this.terminateDialog();
+                } else {
+                  const [first, ...rest] = response.data;
+                  let prom = this.delayMessage({
+                    msgs: [this.capitalizeArg(first.arg)],
+                    from: 'Me',
+                  }, 1000);
+                  rest.forEach((arg) => {
+                    prom = prom.then(() =>
+                      this.delayMessage(this.capitalizeArg(arg.arg), 1000, true));
+                  });
+                  prom.then(() => {
+                    if (response.data.every(a => a.cArgs.length === 0)) {
+                      return this.terminateDialog();
+                    }
+                    return this.askCounterArguments(response.data, 1000);
+                  });
+                }
               });
             },
           },
