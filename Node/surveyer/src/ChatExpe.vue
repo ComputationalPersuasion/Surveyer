@@ -107,6 +107,11 @@
                       :req="!testing"/>
           </s-form>
         </s-question>
+        <s-question question="Do you have any additional argument(s) that you want to share with us?">
+          <s-form base_name="newarg">
+            <s-text-area :maxrows="20" base_name="text"/>
+          </s-form>
+        </s-question>
       </s-step>
 
       <s-submit ref="submit" message="Thank you for participating in this survey.
@@ -123,7 +128,7 @@ import { SSurvey, SStep, SQuestion, SSubmit } from './components';
 import { SSex } from './components/builtin/form';
 import SProlificId from './components/builtin/questions/SProlificId';
 import { STipi } from './components/builtin/questionnaires';
-import { SForm, SInput, SSlider } from './components/core';
+import { SForm, SInput, SSlider, STextArea } from './components/core';
 import { SChat } from './components/containers';
 
 export default {
@@ -140,6 +145,7 @@ export default {
     SSex,
     STipi,
     SSubmit,
+    STextArea,
     QBtn,
   },
   data() {
@@ -161,6 +167,7 @@ export default {
         features: {
           postbel: this.$store.getters['belief/post/value'],
           postbelgov: this.$store.getters['beliefgov/post/value'],
+          additionalarg: this.$store.getters['newarg/text/value'],
         },
       });
     },

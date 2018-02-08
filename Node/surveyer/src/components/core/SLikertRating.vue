@@ -13,7 +13,7 @@ import { minValue } from 'vuelidate/lib/validators';
 import { CoreItem } from '../mixins';
 
 export default {
-  name: 's-liker-rating',
+  name: 's-likert-rating',
   components: {
     QRating,
     QField,
