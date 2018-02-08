@@ -112,21 +112,26 @@ def post_arguments():
   userid = json['userid']
   resp = []
   if json['args']:
-  chosen_args = list(map(lambda t: args[t], json['args']))
-  rows[userid].args.append(list(map(lambda a: a.tag, chosen_args)))
-  args_to_attack = choose_args_to_attack(chosen_args)
-  resp = []
-  defense = set()
-  for a in args_to_attack:
-    count = counter_args_preferred_count(a, rows[userid].features)
-    sorted_count = sorted(count, key=lambda p: count[p], reverse=True)
-    defense.update(sorted_count[0:NUMOFDEFENDERS])
-  for tag in defense:
-    arg = args[tag]
-    atkers = transform_atkers(arg.atkers)
+    chosen_args = list(map(lambda t: args[t], json['args']))
+    rows[userid].args.append(list(map(lambda a: a.tag, chosen_args)))
+    args_to_attack = choose_args_to_attack(chosen_args)
+    defense = set()
+    for a in args_to_attack:
+      count = counter_args_preferred_count(a, rows[userid].features)
+      sorted_count = sorted(count, key=lambda p: count[p], reverse=True)
+      defense.update(sorted_count[0:NUMOFDEFENDERS])
+    for tag in defense:
+      arg = args[tag]
+      atkers = transform_atkers(arg.atkers)
+      resp.append({'arg': arg.arg,
+                  'tag': arg.tag,
+                  'cArgs': atkers})
+  if not resp and not rows[userid].g2played:
+    rows[userid].g2played = True
+    arg = args['g2']
     resp.append({'arg': arg.arg,
-                 'tag': arg.tag,
-                 'cArgs': atkers})
+                  'tag': 'g2',
+                  'cArgs': transform_atkers(arg.atkers)})
   return jsonify(resp)
 
 @app.route('/submit', methods=['POST'])

@@ -3,6 +3,7 @@ class Participant:
     self.id = id
     self.args = []
     self.features = {}
+    self.g2played = False
 
   def __str__(self):
     return f"[{self.id}] {self.features}"
