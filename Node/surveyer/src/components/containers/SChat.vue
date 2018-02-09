@@ -75,7 +75,7 @@ export default {
     },
     terminateDialog() {
       return this.delayMessage({
-        msgs: ['We do not have any additional argument to present.', 'Please proceed to the next page.'],
+        msgs: ['Thank you for your views so far, please proceed to the next page.'],
         from: 'Me',
       }, 1000).then(() => this.validateChat());
     },
@@ -101,17 +101,13 @@ export default {
           initbelgov: this.$store.getters['beliefgov/pre/value'],
         },
       }).then((response) => {
-        this.delayMessage({
-          msgs: [
-            capitalize(response.data.arg),
-          ],
-          from: 'Me',
-        }, 1000).then(() => this.askCounterArguments([response.data], 1000));
+        this.delayMessage(capitalize(response.data.arg), 1000, true).then(() =>
+          this.askCounterArguments([response.data], 1000));
       });
     },
     askCounterArguments(args, timeout) {
       return this.delayMessage({
-        text: 'Please click to select you answer(s).',
+        text: 'Please click here to select you answer(s).',
         type: 'arg',
         arguments: args,
       }, timeout);
@@ -155,7 +151,7 @@ export default {
         };
       });
       Dialog.create({
-        title: 'Please select the answer(s) that are best explaining your situation for each argument.',
+        title: 'Please select the answer(s) that best explain your response.',
         form: formObj,
         buttons: [
           'Cancel',

@@ -17,6 +17,7 @@ def after_request(response):
 
 NUMOFDEFENDERS = 1
 MAXNUMTODEF = 4
+RANDOMDEFENDER = False
 
 rows = {}
 
@@ -117,9 +118,17 @@ def post_arguments():
     args_to_attack = choose_args_to_attack(chosen_args)
     defense = set()
     for a in args_to_attack:
-      count = counter_args_preferred_count(a, rows[userid].features)
-      sorted_count = sorted(count, key=lambda p: count[p], reverse=True)
-      defense.update(sorted_count[0:NUMOFDEFENDERS])
+      if RANDOMDEFENDER:
+        defense.update(map(lambda a: a.tag, random.sample(a.atkers, NUMOFDEFENDERS)))
+      else:
+        count = counter_args_preferred_count(a, rows[userid].features)
+        sorted_count = sorted(count, key=lambda p: count[p], reverse=True)
+        defense.update(sorted_count[0:NUMOFDEFENDERS])
+    if args['g2'] in defense:
+      if rows[userid].g2played:
+        defense -= args['g2']
+      else:
+        rows[userid].g2played = True
     for tag in defense:
       arg = args[tag]
       atkers = transform_atkers(arg.atkers)

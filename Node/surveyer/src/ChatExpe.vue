@@ -5,9 +5,9 @@
       <s-step>
         <s-question question="Hello,
 
-        You are about to take part of a survey concerning cycling from home to work.
+        You are about to take part in a survey concerning cycling from home to work.
 
-        This is completely anonymous and you can decide to stop you participation at any point in time.
+        This is completely anonymous and you can decide to stop your participation at any point in time.
         In addition, there is no right or wrong answer. We are only interested in what you think.
 
         Thank you, please proceed to the next page."/>
@@ -27,7 +27,7 @@
       </s-step>
 
       <s-step>
-        <s-question question="What is your position toward cycling from home to work?" :req="!testing">
+        <s-question question="What is your position towards cycling from home to work?" :req="!testing">
           <s-form base_name="belief">
             <s-slider error_message="Please select a value on the slider."
                       left_label="Negative"
@@ -62,8 +62,7 @@
       </s-step>
 
       <s-step>
-        <s-question question="Please read and interact with the chat box below.
-        You will not be able to type in your answer. However, you will be able to click on messages when instructed to do so." :req="!testing">
+        <s-question question="Please read and interact with the chat box below. You will not be able to type in your answer. However, you will be able to click on messages when asked to do so." :req="!testing">
           <q-btn v-if="!conversation_started"
                  color='primary' class="q-field"
                  @click="startConversation">
@@ -75,7 +74,7 @@
       </s-step>
 
       <s-step>
-        <s-question question="What is your position toward cycling from home to work?" :req="!testing">
+        <s-question question="What is your position now towards cycling from home to work?" :req="false">
           <s-form base_name="belief">
             <s-slider error_message="Please select a value on the slider."
                       left_label="Negative"
@@ -88,10 +87,10 @@
                       :step="0.01"
                       :snap="false"
                       :markers="false"
-                      :req="!testing"/>
+                      :req="false"/>
           </s-form>
         </s-question>
-        <s-question question="What is your position on the government investing in initiatives and infrastructures for cyclists?" :req="!testing">
+        <s-question question="What is your position now on the government investing in initiatives and infrastructures for cyclists?" :req="false">
           <s-form base_name="beliefgov">
             <s-slider error_message="Please select a value on the slider."
                       left_label="Negative"
@@ -104,10 +103,10 @@
                       :step="0.01"
                       :snap="false"
                       :markers="false"
-                      :req="!testing"/>
+                      :req="false"/>
           </s-form>
         </s-question>
-        <s-question question="Do you have any additional argument(s) that you want to share with us?">
+        <s-question question="Do you have any additional argument(s) concerning cycling in the city  that you want to share with us?">
           <s-form base_name="newarg">
             <s-text-area :maxrows="20" base_name="text"/>
           </s-form>
@@ -154,6 +153,14 @@ export default {
       conversation_started: false,
       submitted: false,
     };
+  },
+  mounted() {
+    this.$store.watch(() => this.$store.getters['belief/pre/value'], (val) => {
+      this.$store.commit('belief/post/update', val);
+    });
+    this.$store.watch(() => this.$store.getters['beliefgov/pre/value'], (val) => {
+      this.$store.commit('beliefgov/post/update', val);
+    });
   },
   methods: {
     startConversation() {
