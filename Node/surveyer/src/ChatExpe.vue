@@ -169,7 +169,7 @@ export default {
     },
     submit() {
       this.$refs.submit.show();
-      axios.post('https://back/submit', {
+      axios.post('back/submit', {
         userid: this.$store.getters['prolific/id/value'],
         features: {
           postbel: this.$store.getters['belief/post/value'],
