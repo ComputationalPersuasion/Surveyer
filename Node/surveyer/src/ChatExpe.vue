@@ -149,7 +149,7 @@ export default {
   },
   data() {
     return {
-      testing: true,
+      testing: false,
       conversation_started: false,
       submitted: false,
     };
@@ -169,7 +169,7 @@ export default {
     },
     submit() {
       this.$refs.submit.show();
-      axios.post('http://localhost:5000/submit', {
+      axios.post('https://back/submit', {
         userid: this.$store.getters['prolific/id/value'],
         features: {
           postbel: this.$store.getters['belief/post/value'],

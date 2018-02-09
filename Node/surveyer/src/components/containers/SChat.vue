@@ -88,7 +88,7 @@ export default {
         msgs: ['Hi!', 'Let\'s start with a simple question.'],
         from: 'Me',
       });
-      axios.post('http://localhost:5000/firstcontact', {
+      axios.post('https://back/firstcontact', {
         userid: this.$store.getters['prolific/id/value'],
         features: {
           O: this.$store.getters['tipi/O'],
@@ -188,7 +188,7 @@ export default {
                   sent: true,
                 });
               }
-              axios.post('http://localhost:5000/post_arguments', {
+              axios.post('https://back/post_arguments', {
                 userid: this.$store.getters['prolific/id/value'],
                 args: counterTags,
               }).then((response) => {
