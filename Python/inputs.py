@@ -81,7 +81,7 @@ arg43 = Argument('arg43', 'traffic jams encourage people to cycle', time)
 arg44 = Argument('arg44', 'buying cycle clothing is too expensive', peco)
 arg45 = Argument('arg45', 'my workplace is too far away from my home', time)
 arg46 = Argument('arg46', 'cycling in the city is dangerous for the cyclists', saf)
-arg47 = Argument('arg47', 'many cyclists don\'t know how to ride in traffic', saf)
+arg47 = Argument('arg47', 'but many cyclists don\'t know how to ride in traffic', saf)
 arg48 = Argument('arg48', 'cars kill more pedestrians than bikes', saf)
 arg49 = Argument('arg49', 'building cycle lanes is too expensive for the city', ceco)
 
