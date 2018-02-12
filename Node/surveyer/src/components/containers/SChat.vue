@@ -107,7 +107,7 @@ export default {
     },
     askCounterArguments(args, timeout) {
       return this.delayMessage({
-        text: 'Please click here to select you answer(s).',
+        text: 'Please click here to select your answer(s).',
         type: 'arg',
         arguments: args,
       }, timeout);

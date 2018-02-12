@@ -115,7 +115,7 @@
 
       <s-submit ref="submit" message="Thank you for participating in this survey.
 
-      Please enter the code XXXXXX on Prolific."/>
+      Please enter the code XBQBQSZU on Prolific."/>
     </s-survey>
   </div>
 </template>
