@@ -1,6 +1,12 @@
+import { throttle } from 'quasar-framework';
 import SingleValue from '../../store/modules/SingleValue';
 
 const SingleValued = {
+  data() {
+    return {
+      throttled_value: null,
+    };
+  },
   props: {
     base_name: {
       type: String,
@@ -21,12 +27,13 @@ const SingleValued = {
         return this.$store.getters[`${this.data_name.replace('.', '/')}/value`];
       },
       set(newValue) {
-        this.$store.commit(`${this.data_name.replace('.', '/')}/update`, newValue);
+        this.throttled_value(`${this.data_name.replace('.', '/')}/update`, newValue);
       },
     },
   },
   created() {
     this.$store.registerModule(this.data_name.split('.'), SingleValue(this.defaultValue()));
+    this.throttled_value = throttle((n, v) => this.$store.commit(n, v), 100);
   },
 };
 
