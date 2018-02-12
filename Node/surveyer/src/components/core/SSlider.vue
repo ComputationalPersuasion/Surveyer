@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       touched: false,
+      debounced_notify: null,
     };
   },
   components: {
@@ -101,6 +102,14 @@ export default {
       default: 0,
     },
   },
+  computed: {
+    isValid() {
+      return !this.req || (!this.$v.value.$invalid && this.touched);
+    },
+  },
+  mounted() {
+    this.debounced_notify = debounce(() => this.notify(), 300);
+  },
   methods: {
     defaultValue() {
       return this.default_value;
@@ -108,7 +117,7 @@ export default {
     change() {
       this.touched = true;
       this.$v.value.$touch();
-      debounce(() => this.notify(), 300);
+      this.debounced_notify();
     },
   },
 };
